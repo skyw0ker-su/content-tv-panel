@@ -1,0 +1,26 @@
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: signage
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}
+      POSTGRES_DB: signage
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  server:
+    build: ./server
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: postgresql+psycopg://signage:${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD}@db/signage
+      ADMIN_TOKEN: ${ADMIN_TOKEN:?set ADMIN_TOKEN}
+      STORAGE_DIR: /srv/storage
+    volumes:
+      - storage:/srv/storage
+    ports:
+      - "8000:8000"
+
+volumes:
+  pgdata:
+  storage:

@@ -1,0 +1,16 @@
+[Unit]
+Description=Content TV panel agent
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=signage
+EnvironmentFile=/etc/signage-agent/agent.env
+# Display for libVLC; confirm on the real device (Astra Linux X session).
+Environment=DISPLAY=:0
+ExecStart=/usr/bin/signage-agent
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=graphical.target
